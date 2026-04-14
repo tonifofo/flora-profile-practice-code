@@ -7,8 +7,8 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
             - name: Build image 
-              run: docker build -t floramutoni/flora-profile-practice-code .
+              run: docker build -t ${{ secrets.DOCKER_USERNAME }}/flora-profile-practice-code .
             - name: list images
               run: docker images
-              
+
     
