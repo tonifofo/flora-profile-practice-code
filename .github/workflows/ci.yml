@@ -20,5 +20,21 @@ jobs:
               run: |
                 docker push ${{ secrets.DOCKER_USERNAME }}/flora-profile-practice-code:${{github.run_number}}
                 docker push ${{ secrets.DOCKER_USERNAME }}/flora-profile-practice-code
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: SSh to linux and run container
+              uses: appleboy/ssh-action@v1
+              with:
+                 host: ${{ secrets.HOST }}
+                 username: ${{ secrets.SSH_USERNAME }}
+                 key: ${{ secrets.PRIVATE_KEY }}
+                 script: |
+                    docker rm -f flora-profile-practice || echo "Container not found, skipping removal"
+                    docker run -d -- name flora-profile-practice -p 8080:80 ${{ secrets.DOCKER_USERNAME }}/flora-profile-practice-code
+                 
+                 
+
 
     
